@@ -1,6 +1,6 @@
 /*eslint-disable*/
-import React from "react";
-
+import React, { Component } from 'react';
+import axios from 'axios';
 // reactstrap components
 import { Container, Col,
   Label,
@@ -16,7 +16,42 @@ import { Button} from "reactstrap";
 import $ from 'jquery';
 // core components
 
-function IndexHeader() {
+
+class IndexPage extends Component {
+  constructor() {
+    super();
+    this.state = { memories: [], UserEmail: 'ryan@hotmail.com'};
+    this.handleSubmit = this.handleSubmit.bind(this)
+}
+
+  componentDidMount(){
+
+    var data = {
+      UserEmail: this.state.UserEmail 
+    }
+
+    axios.get("http://localhost:8081/userAuthentication", {
+      params: {
+        UserEmail: 'ryan@hotmail.com'
+      }
+    }).then((res) => {
+         this.setState({
+             memories: res.data
+         });
+  
+     })
+  }
+
+  handleSubmit(event) {
+    
+    {this.state.memories.map(function (memories, index) {
+      return (
+          console.log(memories)
+      );
+  })}
+  }
+
+  render() {
   return (
       <div
       id="landingStart"
@@ -66,7 +101,7 @@ function IndexHeader() {
                 className="btn btn-info"
                 color="primary"
                 outline
-                href="/memory-page"
+                onClick={this.handleSubmit}
                 style={{width:'100%', marginBottom:'10px'}}
                 >
                 Login
@@ -86,6 +121,6 @@ function IndexHeader() {
         </div>
       </div>
   );
-}
+}}
 
-export default IndexHeader;
+export default IndexPage;

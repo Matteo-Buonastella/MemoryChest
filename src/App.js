@@ -23,8 +23,6 @@ componentDidMount(){
         });
 
     })
-
-
 }
 
 
@@ -86,7 +84,6 @@ handleSubmit(event) {
                   <tr>
                       <td>{memories.userID}</td>
                       <td>{memories.title}</td>
-                      
                   </tr>
               );
           })}

@@ -8,7 +8,7 @@ const app = express();
 
 const mysql = require('mysql');
 //
-const {addNewMemory,getAllMemories, addUser} = require('./db-services.js');
+const {addNewMemory,getAllMemories, addUser, getValidEmail} = require('./db-services.js');
 
 
 app.use(bodyParser.json());
@@ -16,6 +16,8 @@ app.use(cors());
 
 
 app.get('/data', getAllMemories);
+app.get('/userAuthentication', urlencodedParser,getValidEmail);
+
 app.get("/", (req, res) => {
   
  });
