@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDatetime from "react-datetime";
 import axios from 'axios';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 // reactstrap components
 import { Button, Card, Form, Input, Container, Row, Col,
   FormGroup,
@@ -19,16 +20,15 @@ class RegisterPage extends Component {
   constructor() {
     super();
     this.birth = React.createRef();
-    this.state = { memories: [] ,
-    UserID : "Testasdas",
-    FirstName: 'Ryan', LastName:'Wilson', DOb:'1992-05-20', Email_id:'ryan@hotmail.com',status:'unverified'
+    this.state = { memories: []
     };
     this.handleSubmit = this.handleSubmit.bind(this)
 }
 
 
-handleSubmit(event) {
 
+handleSubmit(event) {
+  event.preventDefault()
   var entryPoint = true; 
   if (ReactDOM.findDOMNode(this.refs.FirstName).value == "") {
     document.getElementById("FName").style.backgroundColor = "red";
@@ -64,18 +64,49 @@ handleSubmit(event) {
     document.getElementById("Births").style.backgroundColor = "red";
     entryPoint = false; 
   } else {
-    document.getElementById("Births").style.backgroundColor = "white";
+    document.getElementById("Births").style.backgroundColor = "transparent";
   }
 
+  
+  axios.get("http://localhost:8081/userAuthentication", {
+    params: {
+      UserEmail: ReactDOM.findDOMNode(this.refs.Email).value
+    }
+  }).then((res) => {
+      if (res.data["0"]["Count(*)"] >= 1) {
+        document.getElementById("Emails").style.backgroundColor = "red";
+        document.getElementById("tempStore").innerHTML = res.data["0"]["Count(*)"];
+      } 
+   })
 
-   event.preventDefault()
+   if (document.getElementById("tempStore").innerHTML >= 1) {
+    entryPoint = false; 
+   }
+
+   if (/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test( ReactDOM.findDOMNode(this.refs.Email).value)) {
+    document.getElementById("Emails").style.backgroundColor = "transparent";
+     } 
+     else {
+    entryPoint = false; 
+    document.getElementById("Emails").style.backgroundColor = "red";
+   }
+
+   if (/\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*/.test(this.birth.current.state.inputValue)) {
+    document.getElementById("Births").style.backgroundColor = "transparent";
+     } 
+     else {
+    entryPoint = false; 
+    document.getElementById("Births").style.backgroundColor = "red";
+   }
+
    var data = {
     UserID: ReactDOM.findDOMNode(this.refs.Email).value,
     FirstName: ReactDOM.findDOMNode(this.refs.FirstName).value,
     LastName: ReactDOM.findDOMNode(this.refs.LastName).value,
     DOb: this.birth.current.state.inputValue, 
     Email_id: ReactDOM.findDOMNode(this.refs.Email).value,
-    status: "Unverified"
+    status: "Unverified",
+    userPass: ReactDOM.findDOMNode(this.refs.Password).value
   }
   if (entryPoint == true) {
   document.getElementById("formValid").innerHTML=""
@@ -172,6 +203,7 @@ handleSubmit(event) {
                     Forgot password?
                   </Button>
                 </div>
+                <div id="tempStore" style={{color:"transparent"}}>Temp</div>
               </Card>
             </Col>
           </Row>
