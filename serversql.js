@@ -5,14 +5,19 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const cors = require("cors");
 const app = express();
-
+const fileUpload = require('express-fileupload');
 const mysql = require('mysql');
+var multer  = require('multer')
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+// const fileUploadMiddleware = require('./file-upload-middleware')
 //
 const {addNewMemory,getAllMemories, addUser, getValidEmail} = require('./db-services.js');
 
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(fileUpload());
 
 
 app.get('/data', getAllMemories);
@@ -22,7 +27,8 @@ app.get("/", (req, res) => {
   
  });
 
- app.post('/addMemory',urlencodedParser,addNewMemory);
+// app.post('/addMemory',urlencodedParser,addNewMemory);
+app.post('/addMemory',addNewMemory);
 
 app.post('/addUsers',urlencodedParser,addUser)
 
