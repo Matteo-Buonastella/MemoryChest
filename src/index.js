@@ -14,6 +14,7 @@ import FamilyTreePage from "views/examples/FamilyTreePage.js";
 import ImportantLinkPage from "views/examples/ImportantLinkPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import Page404 from "views/examples/404Page.js";
+import RegSuccess from "views/examples/RegistrationSuccess.js";
 // others
 
 ReactDOM.render(
@@ -23,6 +24,10 @@ ReactDOM.render(
       <Route
         path="/memory-page"
         render={props => <MemoryPage {...props} />}
+      />
+       <Route
+        path="/account-success"
+        render={props => <RegSuccess {...props} />}
       />
       <Route
         path="/importantLink-page"

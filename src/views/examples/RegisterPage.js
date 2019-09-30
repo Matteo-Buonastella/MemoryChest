@@ -13,22 +13,49 @@ import { Button, Card, Form, Input, Container, Row, Col,
 
 // core components
 import ExamplesNavbar from "components/Navbars/IndexNavbar.js";
-
+import  { Redirect } from 'react-router-dom'
 const nodemailer = require('nodemailer');
+
 
 class RegisterPage extends Component {
   constructor() {
     super();
     this.birth = React.createRef();
-    this.state = { memories: []
-    };
+    this.state = { memories: []};
     this.handleSubmit = this.handleSubmit.bind(this)
+}
+getWeather = query => {
+  var str=[];
+  axios.get("http://localhost:8081/userAuthentication", {
+    params: {
+      UserEmail: ReactDOM.findDOMNode(this.refs.Email).value
+    }
+  }).then((res) => {
+     str.push(res.data)
+   })
+   return str;
+}
+
+wrapper = async () => {
+  this.getTest();
+  this.handleSubmit();
+}
+
+getTest = async () => {
+  axios.get("http://localhost:8081/userAuthentication", {
+    params: {
+      UserEmail: ReactDOM.findDOMNode(this.refs.Email).value
+    }
+  }).then((res) => {
+      if (res.data["0"]["Count(*)"] >= 1) {
+        document.getElementById("Emails").style.backgroundColor = "red";
+        document.getElementById("tempStore").innerHTML = res.data["0"]["Count(*)"];
+      } 
+   })
 }
 
 
-
 handleSubmit(event) {
-  event.preventDefault()
   var entryPoint = true; 
   if (ReactDOM.findDOMNode(this.refs.FirstName).value == "") {
     document.getElementById("FName").style.backgroundColor = "red";
@@ -73,11 +100,20 @@ handleSubmit(event) {
       UserEmail: ReactDOM.findDOMNode(this.refs.Email).value
     }
   }).then((res) => {
+    this.setState({
+      memories: res.data["0"]["Count(*)"]
+  });
       if (res.data["0"]["Count(*)"] >= 1) {
-        document.getElementById("Emails").style.backgroundColor = "red";
-        document.getElementById("tempStore").innerHTML = res.data["0"]["Count(*)"];
+        //document.getElementById("Emails").style.backgroundColor = "red";
+        //document.getElementById("tempStore").innerHTML = res.data["0"]["Count(*)"];
       } 
    })
+
+   const count = this.getWeather();
+   console.log(this.getWeather())
+   console.log(count);
+   console.log(this.state.memories)
+   console.log(document.getElementById("tempStore").innerHTML)
 
    if (document.getElementById("tempStore").innerHTML >= 1) {
     entryPoint = false; 
@@ -109,6 +145,7 @@ handleSubmit(event) {
     userPass: ReactDOM.findDOMNode(this.refs.Password).value
   }
   if (entryPoint == true) {
+  
   document.getElementById("formValid").innerHTML=""
   console.log(data)
   axios.post("http://localhost:8081/addUsers",data).then(function(response) {
@@ -123,6 +160,7 @@ handleSubmit(event) {
   }).catch(function(err) {
       console.log(err)
   });
+  this.props.history.push('/account-success')
 } else {
   document.getElementById("formValid").innerHTML="<i class='nc-icon nc-alert-circle-i'/> Fields are invalid"
 }

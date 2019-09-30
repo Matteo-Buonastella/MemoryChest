@@ -17,6 +17,7 @@ import $ from 'jquery';
 // core components
 
 
+
 class IndexPage extends Component {
   constructor() {
     super();
@@ -30,9 +31,10 @@ class IndexPage extends Component {
       UserEmail: this.state.UserEmail 
     }
 
-    axios.get("http://localhost:8081/userAuthentication", {
+    axios.get("http://localhost:8081/accountAuthentication", {
       params: {
-        UserEmail: 'ryan@hotmail.com'
+        UserEmail: 'rwilson31@myseneca.ca',
+        UserPass: 'Test123'
       }
     }).then((res) => {
          this.setState({

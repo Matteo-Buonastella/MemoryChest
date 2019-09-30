@@ -12,7 +12,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 // const fileUploadMiddleware = require('./file-upload-middleware')
 //
-const {addNewMemory,getAllMemories, addUser, getValidEmail} = require('./db-services.js');
+const {addNewMemory,getAllMemories, addUser, getValidEmail, getValidEmailPass} = require('./db-services.js');
 
 
 app.use(bodyParser.json());
@@ -22,6 +22,7 @@ app.use(fileUpload());
 
 app.get('/data', getAllMemories);
 app.get('/userAuthentication', urlencodedParser,getValidEmail);
+app.get('/accountAuthentication', urlencodedParser,getValidEmailPass);
 
 app.get("/", (req, res) => {
   

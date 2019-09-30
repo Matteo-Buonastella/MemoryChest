@@ -36,6 +36,18 @@ module.exports={
           });
         },
 
+        getValidEmailPass: (req,res)=>
+        {
+          
+          var sql = "SELECT Count(*) FROM Users where Email_id = '" + req.query.UserEmail + "' AND userPass = '" + req.query.UserPass + "'";
+          dbconnection.query(sql, (err, result)=>{
+            console.log(err);
+              if(err) throw err;
+              
+              res.send(result);
+          });
+        },
+
         addNewMemory:(req,res)=>{
           console.log("add memory")
           
