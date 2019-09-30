@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import "assets/css/bootstrap.min.css";
 import "assets/css/base.css";
 import "assets/css/formats.css";
-import 'bootstrap/dist/css/bootstrap.css';
+
 // pages
 import Index from "views/Index.js";
 import MemoryPage from "views/examples/MemoryPage.js";
